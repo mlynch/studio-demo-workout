@@ -1,0 +1,7 @@
+{
+  "name": "Studio Workout",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
