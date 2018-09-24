@@ -1,0 +1,33 @@
+## START: Static Group Authorization. **
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Managers"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+## END: Static Group Authorization. **
+
+## START: Static Group Authorization. **
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Employees"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+## END: Static Group Authorization. **
+
+## START: Throw if Unauthorized. **
+#if( !$isAuthorized )
+$util.unauthorized()
+#end
+## END: Throw if Unauthorized. **
+
+$util.toJson($context.result)

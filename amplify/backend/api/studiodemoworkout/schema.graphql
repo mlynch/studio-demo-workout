@@ -1,0 +1,32 @@
+type Workout
+  @model 
+  @auth(rules: [
+      {allow: groups, groups: ["Managers"], mutations: [create, update, delete]},
+      {allow: groups, groups: ["Employees"], queries: [get, list]}
+    ])
+{
+  id: ID!
+  name: String!
+  description: String!
+  created: String!
+}
+
+type CompletedWorkout
+  @model
+  @auth(rules: [{allow: owner}])
+{
+  id: ID!
+  when: String!
+  workout: Workout!
+  reps: Int!
+  sets: Int!
+}
+
+type ExerciseSession
+  @model
+  @auth(rules: [{allow: owner}])
+{
+  id: ID!
+  when: String!
+  workouts: [CompletedWorkout]!
+}

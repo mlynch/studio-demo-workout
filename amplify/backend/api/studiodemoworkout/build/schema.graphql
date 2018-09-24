@@ -1,0 +1,203 @@
+type Mutation {
+  createWorkout(input: CreateWorkoutInput!): Workout
+  updateWorkout(input: UpdateWorkoutInput!): Workout
+  deleteWorkout(input: DeleteWorkoutInput!): Workout
+  createCompletedWorkout(input: CreateCompletedWorkoutInput!): CompletedWorkout
+  updateCompletedWorkout(input: UpdateCompletedWorkoutInput!): CompletedWorkout
+  deleteCompletedWorkout(input: DeleteCompletedWorkoutInput!): CompletedWorkout
+  createExerciseSession(input: CreateExerciseSessionInput!): ExerciseSession
+  updateExerciseSession(input: UpdateExerciseSessionInput!): ExerciseSession
+  deleteExerciseSession(input: DeleteExerciseSessionInput!): ExerciseSession
+}
+
+type Query {
+  getWorkout(id: ID!): Workout
+  listWorkouts(filter: ModelWorkoutFilterInput, limit: Int, nextToken: String): ModelWorkoutConnection
+  getCompletedWorkout(id: ID!): CompletedWorkout
+  listCompletedWorkouts(filter: ModelCompletedWorkoutFilterInput, limit: Int, nextToken: String): ModelCompletedWorkoutConnection
+  getExerciseSession(id: ID!): ExerciseSession
+  listExerciseSessions(filter: ModelExerciseSessionFilterInput, limit: Int, nextToken: String): ModelExerciseSessionConnection
+}
+
+type Subscription {
+  onCreateWorkout: Workout @aws_subscribe(mutations: ["createWorkout"])
+  onUpdateWorkout: Workout @aws_subscribe(mutations: ["updateWorkout"])
+  onDeleteWorkout: Workout @aws_subscribe(mutations: ["deleteWorkout"])
+  onCreateCompletedWorkout: CompletedWorkout @aws_subscribe(mutations: ["createCompletedWorkout"])
+  onUpdateCompletedWorkout: CompletedWorkout @aws_subscribe(mutations: ["updateCompletedWorkout"])
+  onDeleteCompletedWorkout: CompletedWorkout @aws_subscribe(mutations: ["deleteCompletedWorkout"])
+  onCreateExerciseSession: ExerciseSession @aws_subscribe(mutations: ["createExerciseSession"])
+  onUpdateExerciseSession: ExerciseSession @aws_subscribe(mutations: ["updateExerciseSession"])
+  onDeleteExerciseSession: ExerciseSession @aws_subscribe(mutations: ["deleteExerciseSession"])
+}
+
+type Workout {
+  id: ID!
+  name: String!
+  description: String!
+  created: String!
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelWorkoutConnection {
+  items: [Workout]
+  nextToken: String
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input ModelFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input ModelBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelWorkoutFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  description: ModelStringFilterInput
+  created: ModelStringFilterInput
+  and: [ModelWorkoutFilterInput]
+  or: [ModelWorkoutFilterInput]
+  not: ModelWorkoutFilterInput
+}
+
+input CreateWorkoutInput {
+  name: String!
+  description: String!
+  created: String!
+}
+
+input UpdateWorkoutInput {
+  id: ID!
+  name: String
+  description: String
+  created: String
+}
+
+input DeleteWorkoutInput {
+  id: ID
+}
+
+type CompletedWorkout {
+  id: ID!
+  when: String!
+  workout: Workout!
+  reps: Int!
+  sets: Int!
+}
+
+type ModelCompletedWorkoutConnection {
+  items: [CompletedWorkout]
+  nextToken: String
+}
+
+input ModelCompletedWorkoutFilterInput {
+  id: ModelIDFilterInput
+  when: ModelStringFilterInput
+  reps: ModelIntFilterInput
+  sets: ModelIntFilterInput
+  and: [ModelCompletedWorkoutFilterInput]
+  or: [ModelCompletedWorkoutFilterInput]
+  not: ModelCompletedWorkoutFilterInput
+}
+
+input CreateCompletedWorkoutInput {
+  when: String!
+  reps: Int!
+  sets: Int!
+}
+
+input UpdateCompletedWorkoutInput {
+  id: ID!
+  when: String
+  reps: Int
+  sets: Int
+}
+
+input DeleteCompletedWorkoutInput {
+  id: ID
+}
+
+type ExerciseSession {
+  id: ID!
+  when: String!
+  workouts: [CompletedWorkout]!
+}
+
+type ModelExerciseSessionConnection {
+  items: [ExerciseSession]
+  nextToken: String
+}
+
+input ModelExerciseSessionFilterInput {
+  id: ModelIDFilterInput
+  when: ModelStringFilterInput
+  and: [ModelExerciseSessionFilterInput]
+  or: [ModelExerciseSessionFilterInput]
+  not: ModelExerciseSessionFilterInput
+}
+
+input CreateExerciseSessionInput {
+  when: String!
+}
+
+input UpdateExerciseSessionInput {
+  id: ID!
+  when: String
+}
+
+input DeleteExerciseSessionInput {
+  id: ID
+}

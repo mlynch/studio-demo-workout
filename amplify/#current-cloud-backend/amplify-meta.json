@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "studiodemoworkout-20180923191541-authRole",
+            "UnauthRoleArn": "arn:aws:iam::956920542798:role/studiodemoworkout-20180923191541-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::956920542798:role/studiodemoworkout-20180923191541-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "studiodemoworkout-20180923191541-deployment",
+            "UnauthRoleName": "studiodemoworkout-20180923191541-unauthRole",
+            "StackName": "studiodemoworkout-20180923191541",
+            "StackId": "arn:aws:cloudformation:us-east-2:956920542798:stack/studiodemoworkout-20180923191541/f8ed1b70-bf8e-11e8-a2b1-06bb9b42ed9a"
+        }
+    }
+}

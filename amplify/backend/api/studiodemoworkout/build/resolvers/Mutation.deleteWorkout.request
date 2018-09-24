@@ -1,0 +1,65 @@
+## START: Static Group Authorization. **
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Managers"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+## END: Static Group Authorization. **
+
+## START: Throw if Unauthorized. **
+#if( !$isAuthorized )
+$util.unauthorized()
+#end
+## END: Throw if Unauthorized. **
+
+## START: Static Group Authorization. **
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Employees"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+## END: Static Group Authorization. **
+
+## START: Throw if Unauthorized. **
+#if( !$isAuthorized )
+$util.unauthorized()
+#end
+## END: Throw if Unauthorized. **
+
+#if( $authCondition )
+  #set( $condition = $authCondition )
+$util.qr($condition.put("expression", "$condition.expression AND attribute_exists(#id)"))
+$util.qr($condition.expressionNames.put("#id", "id"))
+#else
+  #set( $condition = {
+  "expression": "attribute_exists(#id)",
+  "expressionNames": {
+      "#id": "id"
+  }
+} )
+#end
+#if( $versionedCondition )
+  $util.qr($condition.put("expression", "($condition.expression) AND $versionedCondition.expression"))
+    $util.qr($condition.expressionNames.putAll($versionedCondition.expressionNames))
+      #set( $expressionValues = $util.defaultIfNull($condition.expressionValues, {}) )
+    $util.qr($expressionValues.putAll($versionedCondition.expressionValues))
+      #set( $condition.expressionValues = $expressionValues )
+#end
+{
+  "version": "2017-02-28",
+  "operation": "DeleteItem",
+  "key": {
+      "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+  },
+  "condition": $util.toJson($condition)
+}

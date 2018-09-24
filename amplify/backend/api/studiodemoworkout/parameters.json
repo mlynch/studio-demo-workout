@@ -1,0 +1,9 @@
+{
+    "AppSyncApiName": "studiodemoworkout",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito6837559c",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

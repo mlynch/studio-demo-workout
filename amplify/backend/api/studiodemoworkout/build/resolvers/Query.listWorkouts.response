@@ -1,0 +1,31 @@
+## START: Filter Authorized Items. **
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Managers"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+#set( $userGroups = $ctx.identity.claims.get("cognito:groups") )
+#set( $allowedGroups = ["Employees"] )
+#set($isAuthorized = $util.defaultIfNull($isAuthorized, false))
+#foreach( $userGroup in $userGroups )
+  #foreach( $allowedGroup in $allowedGroups )
+    #if( $allowedGroup == $userGroup )
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+#set( $items = [] )
+#foreach( $item in $ctx.result.items )
+  #if( $isAuthorized == true || $isAuthorized == true )
+$util.qr($items.add($item))
+  #end
+#end
+#set( $ctx.result.items = $items )
+## END: Filter Authorized Items. **
+
+$util.toJson($ctx.result)
